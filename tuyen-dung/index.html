@@ -9,6 +9,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.json">
 <meta name="apple-mobile-web-app-title" content="Tuyển dụng">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#3f6fb5">
 <style>
   html,body{margin:0;min-height:100%;background:#f5f7fb;color:#1f2a44;font:15px/1.5 -apple-system,system-ui,"Segoe UI",sans-serif}
@@ -27,9 +29,9 @@
 <div class="wrap">
   <img src="apple-touch-icon.png" alt="">
   <h1>Tuyển dụng Brando</h1>
-  <div class="sub" id="dangMo">Đang mở app tuyển dụng…</div>
+  <div class="sub" id="dangMo">Làm theo hướng dẫn bên dưới để có biểu tượng app trên điện thoại</div>
   <a class="btn" id="nut" href="https://script.google.com/a/macros/brando.vn/s/AKfycbzUChGKo8HaQFKj-MI7xPeSQ0k2rhPoY2R0cKjLTcXiYOPeQs062BWuNWXWT5FBuAL4/exec">Mở app tuyển dụng</a>
-  <div class="huong" id="huong" hidden>
+  <div class="huong" id="huong">
     <b>Thêm biểu tượng ra màn hình chính</b>
     <ol>
       <li><b>iPhone (Safari):</b> bấm nút Chia sẻ <span aria-hidden="true">⬆️</span> → <b>Thêm vào MH chính</b> → Thêm.</li>
@@ -39,15 +41,18 @@
   </div>
 </div>
 <script>
-  // Mở bằng link có ?cai → hiện hướng dẫn thêm ra màn hình (không chuyển trang).
-  // Bấm biểu tượng ngoài màn hình chính → tự chuyển vào app thật (Google Apps Script).
+  // Chỉ tự chuyển vào app khi mở TỪ BIỂU TƯỢNG ngoài màn hình chính (chế độ app) hoặc link có ?mo=app.
+  // Mở bằng trình duyệt bình thường → ở lại trang này để thêm biểu tượng (có logo Brando).
   var app = document.getElementById('nut').href;
-  if (location.search.indexOf('cai') >= 0) {
-    document.getElementById('huong').hidden = false;
-    document.getElementById('dangMo').textContent = 'Làm theo hướng dẫn bên dưới để có biểu tượng trên điện thoại';
-    history.replaceState(null, '', location.pathname); // biểu tượng lưu link sạch → lần sau tự mở app
-  } else {
+  var tuBieuTuong = (window.navigator.standalone === true) ||
+    (window.matchMedia && matchMedia('(display-mode: standalone)').matches) ||
+    location.search.indexOf('mo=app') >= 0;
+  if (tuBieuTuong) {
+    document.getElementById('dangMo').textContent = 'Đang mở app tuyển dụng…';
+    document.getElementById('huong').hidden = true;
     location.replace(app);
+  } else if (location.search) {
+    history.replaceState(null, '', location.pathname); // bỏ ?cai… để biểu tượng lưu link gọn
   }
 </script>
 </body>
