@@ -27,5 +27,17 @@
 <!-- Bảng Vàng thật (Google Apps Script) hiện bên trong trang này -->
 <iframe src="https://script.google.com/macros/s/AKfycbwmv6qEafQQpHi4W9tMKDs2X2mnxV9wTEqob0VZKglHxtEHcrrgPkm2_o2maJ4tO8l1/exec"
         title="Bảng Vàng BRANDO GROWTH" allow="clipboard-write"></iframe>
+<script>
+/* 11/11/2026: giữ hộ đăng nhập Bảng Vàng trên điện thoại (iPhone hay xoá bộ nhớ của khung Google bên trong).
+   Chỉ nói chuyện với khung Bảng Vàng (googleusercontent.com). */
+addEventListener("message", function (e) {
+  try {
+    if (!/\.googleusercontent\.com$/.test(new URL(e.origin).hostname)) return;
+    var d = e.data || {};
+    if (d.bg === "xin-ma") e.source.postMessage({ bg: "ma", v: localStorage.getItem("bg-ma") || "" }, e.origin);
+    else if (d.bg === "luu-ma") { d.v ? localStorage.setItem("bg-ma", d.v) : localStorage.removeItem("bg-ma"); }
+  } catch (x) {}
+});
+</script>
 </body>
 </html>
